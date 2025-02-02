@@ -68,7 +68,7 @@ pub fn save_file(path: &str, content: &[u8]) -> Result<()> {
 
     let git = |args: &[&str]| Command::new("git").args(args).status();
 
-    git(&["add", "numbers", "--sparse"])?;
+    git(&["add", path, "--sparse"])?;
     git(&["commit", "-m", "automatic updates"])?;
     git(&["rebase", "--onto", "origin/main", "HEAD~1", "HEAD"])?;
     git(&["push", "origin", "HEAD:main"])?;
