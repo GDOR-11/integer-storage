@@ -1,6 +1,9 @@
-use integer_storage::save_file;
+use integer_storage::*;
 
-fn main() -> anyhow::Result<()> {
-    save_file("orange.txt", "asxhasx")?;
+#[tokio::main]
+async fn main() -> anyhow::Result<()> {
+    save_file("test.txt", b"bananasssss")?;
+    println!("kjscdnkjsd");
+    println!("{}", read_file("test.txt").await?);
     Ok(())
 }
