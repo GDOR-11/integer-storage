@@ -1,4 +1,4 @@
-use std::{fs, process::Command};
+use std::{fs, path::Path, process::Command};
 
 use anyhow::Result;
 
@@ -50,7 +50,8 @@ pub async fn read_file(path: &str) -> Result<String> {
 /// saves a file to github
 /// * `path` - the full path to the file to save
 /// * `content` - the content of the file to save
-// I didn't use octocrab because it wasn't working
+
+// I didn't use octocrab in the implementation because it wasn't working
 pub fn save_file(path: &str, content: &[u8]) -> Result<()> {
     if !Command::new("git")
         .args(["status", "--porcelain"])
@@ -63,7 +64,9 @@ pub fn save_file(path: &str, content: &[u8]) -> Result<()> {
         ));
     };
 
-    fs::create_dir("numbers")?;
+    if let Some(parent) = Path::new(path).parent() {
+        fs::create_dir_all(parent)?;
+    }
     fs::write(path, content)?;
 
     let git = |args: &[&str]| Command::new("git").args(args).status();
